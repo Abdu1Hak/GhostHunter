@@ -1,0 +1,138 @@
+
+1. Shooter Movement
+- Blit the shooter image and its position on the screen.
+- If keys are pressed, the position is updated via velocity.
+- Position is a Vector(x, y), updated using:
+  `position += velocity_x, velocity_y`.
+
+---
+
+2. Diagonal Movement
+- Issue: Moving diagonally is faster than vertical/horizontal movement.
+- Why: Moving vertically or horizontally uses a fixed speed, but diagonals follow Pythagoras' theorem, leading to a greater resultant velocity.
+  - Example: \(8^2 + 8^2 = 128\), which leads to faster diagonal movement.
+  - Fix: Subtract from diagonal velocity to balance the speed, \( 8^2 \) is adjusted again.
+
+---
+
+3. Avoid Deterioration of Image
+- Rotating an image introduces white space and alters the image data (destructive process).
+- Solution:
+  - Keep a copy of the original (non-rotated) image.
+  - Generate rotations from the original copy.
+- Code:
+  1. Create a copy of the raw image.
+  2. Generate rotations based on the copy and update the main image.
+  3. Use atan to calculate the rotation angle and convert it to degrees for `transform.rotate`.
+  4. Update the image with `-angle`.
+  5. Update the rect object accordingly.
+
+---
+
+4. Hit-Boxes (Rect for Collision and Display)
+- After rotation, new image data is created.
+  - Solution: Use `get_rect()` around the new image and update for display.
+- Movement:
+  - Ensure collision and display rects move with the character.
+  - Update both rect centers and positions during movement.
+
+---
+
+5. Bullet Cooldown
+- Default Cooldown: 0 (user can shoot).
+- When the cooldown is non-zero, it gradually decreases in the update function.
+- Once it hits zero, the user can shoot again, and the cooldown resets to 20.
+
+---
+
+ 6. Bullet Velocity (Direction)
+- Find the horizontal and vertical velocity components.
+- Convert angles to radians.
+- Use basic trigonometry (CAH: adjacent/hypotenuse) to calculate velocity based on the shooter's angle.
+
+---
+
+7. Shoot Logic
+- Cooldown starts at 0 (ready to shoot), and `self_shoot = False`.
+- Offset: Add a small bullet offset to `self.pos` for more realistic shooting.
+- Shooting Process:
+  - Press a button → `self_shoot = True` (shooting mode on).
+  - If cooldown is 0, reset to 20 and instantiate a bullet (call `Bullet` class).
+  - The bullet moves based on horizontal and vertical velocities.
+  - Ensure the bullet’s `x` and `y` positions are updated.
+  - Ensure the shooting method is called once during input handling.
+
+---
+
+8. Implement Bullet Offset
+- Add an offset to the bullet's spawn point for more realism when firing.
+
+---
+
+ 9. Kill Bullet to Prevent Lag
+- Upon bullet creation, assign `self.spawn_time` to a tick value (remains constant).
+- Simultaneously, use `pygame.time.get_ticks()` to track elapsed time.
+- **Kill Condition**: Subtract the current time from `self.spawn_time`. If the bullet has existed longer than its predefined lifetime, destroy the sprite.
+
+---
+
+10. Implement Enemy
+- Create an enemy class and add it to both the enemy sprite group and all sprite group.
+- Position: Assign a rect and set its center to the enemy’s position.
+- Chasing the Player:
+  - Create two positional vectors (for the enemy and player).
+  - Subtract the two to find the distance vector.
+  - Use a function to calculate the distance.
+
+---
+
+11. Normalize and Magnitude
+
+A. Magnitude
+- Use vectors for the enemy and shooter positions.
+- Subtract the vectors and apply `.magnitude()` to find the vector’s length (distance between the two points).
+- **Distance Logic**:
+  - If distance > 0, there is space between the objects.
+  - If distance = 0 or less, the objects overlap.
+
+B. Normalize
+- Subtract the vectors and normalize the result to get a direction vector.
+  - This ensures a consistent direction (unit length).
+  - Multiply the normalized direction by speed to get a consistent velocity.
+  - Apply the velocity to the enemy's position for chasing behavior.
+
+---
+
+12. Create a Grid for the Map (32x32 Tiles)
+- **Tile Size**: Define the tile size (consider scale).
+- **Grid Calculation**: Divide the screen's width and height by the tile size to determine the number of horizontal and vertical tiles.
+
+---
+
+13. Implement Sound
+- Straightforward implementation of sound effects in the game.
+
+---
+
+14. Implement Respawn at Specific Locations
+- Define specific spawn points for respawning after death or certain game events.
+
+---
+
+15. Implement Animation
+- Add animations for the player, enemies, or other game elements.
+
+---
+
+ 16. Implement Score
+- Track and display the player's score based on gameplay events (e.g., killing enemies, surviving waves).
+
+---
+
+17. Implement Boundaries
+- Ensure the player cannot move outside the screen’s boundaries.
+
+---
+
+18. Respawn Call after Game Over
+- When the game is no longer active (e.g., player dies), implement a respawn mechanism.

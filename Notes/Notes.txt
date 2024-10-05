@@ -1,0 +1,126 @@
+
+1. Shooter Movement
+
+- Blit the shooter image and his position on the screen
+- If they keys are pressed, the position is updated via Velocity
+- Position is a Vector(x,y) and updated using += velocity_x, velocity_y
+
+2. Diagonal Movement:
+
+- Moving up and down is stable but moving diagonal is faster
+- Moving Vertical or Horizontal is a stationary number, diagonals are calculated using pythagorean
+- Ultimately, the hypotenuse is a greater, hence moving faster
+- 8^2 + 8^2 = 128 so just subtract the diagonal by 8^2 again
+
+3. Avoid Deterioration of Image
+- When you rotate an image, there is additional white space
+- This is a destructive process that will introduce new image data
+- To avoid this you need a copy of the not rotated image
+- Once you have a copy, you need to generate the rotations on it
+
+Code:
+* Create a copy of the raw image
+* generate rotations based off that copy image and update main image with it
+* Using Atan (Math calculations of a right angle), convert to degrees for later use in transform.rotate
+* Update image at -angle
+* update rect object
+
+4. Hit-Boxes (Rect for collision and display)
+
+* After rotations, New data is created
+* So call get rect around new image and update it for display
+* This only happens in rotations
+
+* As for Movement, make sure collision and display rect move with the character
+* This is done by updated both collision and display rect center and position
+
+5. BULLET Cooldown
+* default cooldown is 0
+* the user is only allowed to shoot if the cooldown is 0
+* If it's not 0, in the update function it will gradually decrease
+* When it hits zero, the user will be able to shoot and cooldown will be 20
+
+
+6. Bullet Velocity (Direction)
+* Find the Horizontal velocity
+* Find the Vertical Velocity
+* CONVERT TO RADIANS
+* ITS USING BASIC CAH - Adjacent/Hypotenuse while knowing the angle in the shooter class
+
+
+7. Shoot Logic
+
+* Initially cooldown is 0 (ready to shoot) and self_shoot = False
+* Implement bullet offset by adding it to self.pos to seem more real
+* When you press a button - self_shoot = True and shooting is on
+* once shooting is one, make sure cooldown is at 0 and then reset to 20 and call Bullet class
+* in the class, the bullet will move
+* Make sure that the bullet positions x and y are being updated by the horizontal and verical vals
+* Make sure that shooting method is called once in the input method
+
+
+8. Implement Bullet Offset
+* Create a spawn for bullet with the addition of the offset so it looks more real
+
+
+9. Kill bullet eventually to prevent lag
+* At the time of bullet creation, self.spawn_time is assigned a tick value that remains constant
+* Simultaneously, pygame.time.get_ticks will keep increasing
+* By subtracting the two, it records how long the bullet has remained alive
+* the condition remains true until it has remained longer than its arbitrary bullet lifetime
+* Then you kill the sprite.
+
+
+12. Implement Enemy
+- in a new class you will have to add it to the enemy sprite group and all sprite group
+- find the zombie and rect
+- make the rect center = position
+- in order for the zombie to chase the player, have 2 positional vectors and find the distance
+- you can create a function to find the distance by subtracting two values
+
+
+13. Normalize and Magnitude
+
+1. Magnitude
+- Have the vector values for enemy and shooter position
+- subtract the values using the function and apply .magnitude to get the length of the vector
+     - this is like finding the distance between the two points in a one numerical value
+- make that value into a distance variable and now you can compare it.
+    - if the value is greater than 0, there is distance between the two objects
+    - if the value is 0 or less, the two object rects are on top of each other
+
+2. Normalize
+- to find the direction value, you subtract both vectors and normalize the resulting value
+- this ensures that the direction is consistent, a 1 unit length
+    - then you must multiply the unit direction with the speed to have a consistent velocity
+    - this velocity can be applied to the enemy position so that he may chase the player
+
+* hit box is not being applied an offset - it doesn't move
+* Solution if you want to see then apply offset, but its already there because of hunt functions
+
+
+14. Create a Grid for Map out of 32x32 bit tiles
+- find the size of tile, consider the scale
+- divide it by the complete x and y value to find the num of tiles on horizontal and vertical
+
+
+15. Implement Sound - pretty easy
+
+16. Implement respawn at specific spawn locations
+
+17. animation
+
+18. Implement Score
+
+19. Implement Boundaries So player doesnt go outside the Screen
+
+20. Create a Respawn Call after Game Active is False
+
+
+
+
+
+
+
+
+
