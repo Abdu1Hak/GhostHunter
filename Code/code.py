@@ -3,7 +3,8 @@ from pygame.math import Vector2
 
 # Start Game
 pygame.init()
-
+import os
+print("Current working directory:", os.getcwd())
 # Windows
 screen = pygame.display.set_mode((1280, 720))
 pygame.display.set_caption('Shooter Game')
@@ -11,17 +12,17 @@ clock = pygame.time.Clock()
 game_active = True
 
 # Background
-tiles = pygame.transform.rotozoom(pygame.image.load('../Assets/Floor Tile.png').convert(), 0, 2)
+tiles = pygame.transform.rotozoom(pygame.image.load('../Assets/Floor_Tile.png').convert(), 0, 2)
 tile_size = 32*2
 
 # Score
 global_score = 0
-score_font = pygame.font.Font('../Audio & Font/PoetsenOne-Regular.ttf', 28)
-game_font = pygame.font.Font('../Audio & Font/PoetsenOne-Regular.ttf', 40)
-retry_font = pygame.font.Font('../Audio & Font/PoetsenOne-Regular.ttf', 18)
+score_font = pygame.font.Font("../Audio_&_Fonts/PoetsenOne-Regular.ttf", 28)
+game_font = pygame.font.Font('../Audio_&_Fonts/PoetsenOne-Regular.ttf', 40)
+retry_font = pygame.font.Font('../Audio_&_Fonts/PoetsenOne-Regular.ttf', 18)
 
 # Music
-bg_music = pygame.mixer.Sound('../Audio & Font/Ghost House.mp3')
+bg_music = pygame.mixer.Sound('../Audio_&_Fonts/Ghost_House.mp3')
 bg_music.play(loops=-1)
 # -1 means play Sound forever
 bg_music.set_volume(0.2)
@@ -48,7 +49,7 @@ class Shooter(pygame.sprite.Sprite):
         self.gun_offset = Vector2(40, 17.25)
 
         # Sound
-        self.shoot_sound = pygame.mixer.Sound('../Audio & Font/Gunshot.wav')
+        self.shoot_sound = pygame.mixer.Sound('../Audio_&_Fonts/Gunshot.wav')
         self.shoot_sound.set_volume(0.2)
 
 
@@ -146,7 +147,7 @@ class Shooter(pygame.sprite.Sprite):
         self.you_lose()
 
         if self.shoot_cooldown > 0:
-            self.shoot_cooldown -= 2
+            self.shoot_cooldown -= 10
 
 
 class Bullet(pygame.sprite.Sprite):
@@ -194,9 +195,9 @@ class Enemy(pygame.sprite.Sprite):
         super().__init__(enemy_group, all_sprites)
 
         # The Three Ghost Images
-        self.ghost_1 = pygame.transform.rotozoom(pygame.image.load('../Assets/ghost 1.png'), 0, 0.2)
-        self.ghost_2 = pygame.transform.rotozoom(pygame.image.load('../Assets/ghost 2.png'), 0, 0.2)
-        self.ghost_3 = pygame.transform.rotozoom(pygame.image.load('../Assets/ghost 3.png'), 0, 0.2)
+        self.ghost_1 = pygame.transform.rotozoom(pygame.image.load('../Assets/ghost_1.png'), 0, 0.2)
+        self.ghost_2 = pygame.transform.rotozoom(pygame.image.load('../Assets/ghost_2.png'), 0, 0.2)
+        self.ghost_3 = pygame.transform.rotozoom(pygame.image.load('../Assets/ghost_3.png'), 0, 0.2)
 
         # Images, Indexes and Rects
         self.images = [self.ghost_1, self.ghost_2, self.ghost_3]
@@ -214,7 +215,7 @@ class Enemy(pygame.sprite.Sprite):
         self.animate_time = 200
 
         # Sound
-        self.ghost_sound = pygame.mixer.Sound('../Audio & Font/Kill.mp3')
+        self.ghost_sound = pygame.mixer.Sound('../Audio_&_Fonts/Kill.mp3')
         self.ghost_sound.set_volume(0.2)
 
     def check_collision(self):
@@ -298,7 +299,7 @@ def draw_score():
     score_surface = score_font.render(f'Kills: {score_text}', True, (0,0,0))
     score_rect = score_surface.get_rect(center = (1170,50))
 
-    ghost_surface = pygame.transform.rotozoom(pygame.image.load('../Assets/ghost 1.png'), 0, 0.1)
+    ghost_surface = pygame.transform.rotozoom(pygame.image.load('../Assets/ghost_1.png'), 0, 0.1)
     ghost_rect = ghost_surface.get_rect(center=(1240,50))
 
     screen.blit(score_surface, score_rect)
